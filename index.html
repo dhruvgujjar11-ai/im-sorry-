@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I'm Sorry, Baby 🥺</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 50%, #e0c3fc 100%);
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background 1s ease;
+        }
+
+        /* Changes to happy pink/blue when she forgives you */
+        body.forgiven {
+            background: linear-gradient(180deg, #fbc2eb 0%, #a6c1ee 50%, #ffb199 100%);
+        }
+
+        /* Falling animations */
+        .particle {
+            position: fixed;
+            top: -10vh;
+            font-size: 1.5rem;
+            animation: fall linear infinite;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(50px); }
+        }
+
+        /* Section Layouts */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        /* Content Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card img {
+            width: 180px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #5c7cfa;
+            margin-bottom: 15px;
+            transition: color 0.5s ease;
+        }
+
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: #5c7cfa;
+            margin-bottom: 20px;
+        }
+
+        body.forgiven h1, body.forgiven h2 {
+            color: #ff4785;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .promise-list {
+            text-align: left;
+            margin: 0 auto;
+            max-width: 400px;
+        }
+
+        .promise-list p {
+            background: rgba(92, 124, 250, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            border-left: 4px solid #5c7cfa;
+            margin-bottom: 15px;
+        }
+
+        body.forgiven .promise-list p {
+            background: rgba(255, 71, 133, 0.1);
+            border-left: 4px solid #ff4785;
+        }
+
+        .scroll-down {
+            margin-top: 30px;
+            font-size: 2.5rem;
+            color: #5c7cfa;
+            animation: bounce 2s infinite;
+            text-decoration: none;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+
+        /* Button Game Container */
+        .game-area {
+            position: relative;
+            height: 250px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .game-btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+            position: absolute;
+        }
+
+        #yesBtn {
+            background: #4cd137;
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 209, 55, 0.4);
+            left: 50%;
+            top: 50px;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
+        #noBtn {
+            background: #e84118;
+            color: white;
+            box-shadow: 0 4px 15px rgba(232, 65, 24, 0.4);
+            left: 50%;
+            top: 130px;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
+        #successMessage {
+            display: none;
+            margin-top: 20px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: #ff4785;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Falling Particles -->
+    <div id="particles-container"></div>
+
+    <!-- SECTION 1: The Apology -->
+    <section class="section" id="section1">
+        <div class="card">
+            <img id="bearGif" src="https://media.tenor.com/t3m41lX37YcAAAAi/cute-bear.gif" alt="Sad Bear">
+            <h1 id="titleText">I'm so sorry, Nandani 🥺</h1>
+            <p>
+                I hate it when we fight, especially when there are so many miles between us and I can't just pull you into a hug. You mean the absolute world to me. I promise to do better because seeing you upset completely breaks my heart.
+            </p>
+            <a href="#section2" class="scroll-down">⬇️</a>
+        </div>
+    </section>
+
+    <!-- SECTION 2: Promises -->
+    <section class="section" id="section2">
+        <div class="card">
+            <h2>My Promises to You</h2>
+            <div class="promise-list">
+                <p>✨ I promise to always listen to you and understand your feelings.</p>
+                <p>✨ I promise to be more patient, no matter the situation.</p>
+                <p>✨ I promise to always remind you how beautiful and perfect you are to me.</p>
+                <p>✨ I promise to never stop fighting for us.</p>
+            </div>
+            <a href="#section3" class="scroll-down">⬇️</a>
+        </div>
+    </section>
+
+    <!-- SECTION 3: The Game -->
+    <section class="section" id="section3">
+        <div class="card">
+            <h2>Will you please forgive me, baby?</h2>
+            
+            <div class="game-area" id="btnContainer">
+                <button id="yesBtn" class="game-btn">Yes, I forgive you ❤️</button>
+                <button id="noBtn" class="game-btn">No 😤</button>
+            </div>
+
+            <div id="successMessage">
+                YAY! Thank you baby! I love you so much! 🥰💕
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- Falling Particles Logic ---
+        const particlesContainer = document.getElementById('particles-container');
+        let currentParticles = ['💧', '😢', '🥀', '🥺']; 
+        
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.innerText = currentParticles[Math.floor(Math.random() * currentParticles.length)];
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            particle.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+            particlesContainer.appendChild(particle);
+            setTimeout(() => particle.remove(), 8000);
+        }
+        let particleInterval = setInterval(createParticle, 500);
+
+        // --- Game Logic ---
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const btnContainer = document.getElementById('btnContainer');
+        const successMessage = document.getElementById('successMessage');
+        const bearGif = document.getElementById('bearGif');
+        const titleText = document.getElementById('titleText');
+
+        // Make "No" button dodge taps and mouse movements
+        function moveNoButton() {
+            const containerRect = btnContainer.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+
+            // Calculate safe bounds so the button stays inside the card
+            const maxX = containerRect.width - btnRect.width;
+            const maxY = containerRect.height - btnRect.height;
+
+            const randomX = Math.max(0, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(0, Math.floor(Math.random() * maxY));
+
+            noBtn.style.transform = 'none'; // reset center transform
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // Works for computer mouse
+        noBtn.addEventListener('mouseover', moveNoButton);
+        
+        // Works for mobile touch screens
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); 
+            moveNoButton();
+        });
+
+        // When she clicks Yes!
+        yesBtn.addEventListener('click', () => {
+            // Make the whole website happy
+            document.body.classList.add('forgiven');
+            titleText.innerText = "You're the best! ✨";
+            
+            // Hide buttons, show success
+            btnContainer.style.display = 'none';
+            successMessage.style.display = 'block';
+            
+            // Swap sad bear for happy hugging bears
+            bearGif.src = "https://media.tenor.com/ef39nFY8b4MAAAAi/bubu-dudu-bubu.gif";
+            
+            // Change falling drops to happy flowers and hearts
+            currentParticles = ['🌸', '🌺', '💖', '✨', '💕', '💐'];
+            
+            // Shoot a burst of happy particles
+            for(let i = 0; i < 50; i++) {
+                setTimeout(createParticle, i * 50);
+            }
+            
+            // Scroll back up to the top so she sees the happy bear
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
